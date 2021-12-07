@@ -2,8 +2,6 @@ package pl.javastudia;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
@@ -103,27 +101,6 @@ public class MyFrame extends JFrame {
         slider.setPaintLabels(true);
         slider.addChangeListener(e -> panel.changeSize(slider.getValue()));
 
-        this.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                switch(e.getKeyChar()) {
-                    case 'o' : {
-                        System.out.println("You chosen circle");
-                        panel.changeShape(2);
-                        break;
-                    }
-                    case 'k' : {
-                        System.out.println("You chosen square");
-                        panel.changeShape(1);
-                        break;
-                    }
-                    default : {
-                        System.out.println("This key isn't assigned to do anything, try another one");
-                        break;
-                    }
-                }
-            }
-        });
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
