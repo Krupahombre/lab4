@@ -2,6 +2,8 @@ package pl.javastudia;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
@@ -11,11 +13,14 @@ public class MyFrame extends JFrame {
     private final int FRAME_HEIGHT = 600;
     private JLabel label1;
     private JLabel label2;
+    private JLabel label3;
+    private JLabel label4;
     private JButton buttonY;
     private JButton buttonN;
     private JButton buttonR;
     private JButton buttonK;
     private JButton buttonO;
+    private JSlider slider;
     private Random random;
     private DrawingPanel panel;
 
@@ -28,11 +33,25 @@ public class MyFrame extends JFrame {
         label1.setHorizontalAlignment(JLabel.CENTER);
 
         label2 = new JLabel();
-        label2.setBounds(60,420,250,20);
+        label2.setBounds(50,420,250,20);
         label2.setText("Choose shape:");
         label2.setFont(new Font("MV Boil", Font.PLAIN, 18));
         label2.setVerticalAlignment(JLabel.CENTER);
         label2.setHorizontalAlignment(JLabel.LEFT);
+
+        label3 = new JLabel();
+        label3.setBounds(35,520,250,40);
+        label3.setText("You can also type: k - square, o - circle");
+        label3.setFont(new Font("MV Boil", Font.PLAIN, 14));
+        label3.setVerticalAlignment(JLabel.CENTER);
+        label3.setHorizontalAlignment(JLabel.LEFT);
+
+        label4 = new JLabel();
+        label4.setBounds(350,420,250,20);
+        label4.setText("Choose size:");
+        label4.setFont(new Font("MV Boil", Font.PLAIN, 18));
+        label4.setVerticalAlignment(JLabel.CENTER);
+        label4.setHorizontalAlignment(JLabel.LEFT);
 
         panel = new DrawingPanel();
 
@@ -58,19 +77,53 @@ public class MyFrame extends JFrame {
 
         buttonR = new JButton("Reset");
         buttonR.setFocusable(false);
-        buttonR.addActionListener(e -> resetFrame());
+        buttonR.addActionListener(e -> panel.drawingCanvas.removeShape());
         buttonR.setBounds(620,460,100,50);
 
         buttonK = new JButton("Square");
         buttonK.setFocusable(false);
-        buttonK.addActionListener(e -> panel.changeShape(1));
+        buttonK.addActionListener(e -> {
+            System.out.println("You chosen square");
+            panel.changeShape(1);
+        });
         buttonK.setBounds(50,460,100,50);
 
         buttonO = new JButton("Circle");
         buttonO.setFocusable(false);
-        buttonO.addActionListener(e -> panel.changeShape(2));
+        buttonO.addActionListener(e -> {
+            System.out.println("You chosen circle");
+            panel.changeShape(2);
+        });
         buttonO.setBounds(160,460,100,50);
 
+        slider = new JSlider(0,100,50);
+        slider.setBounds(350,450,200,100);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(20);
+        slider.setPaintLabels(true);
+        slider.addChangeListener(e -> panel.changeSize(slider.getValue()));
+
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                switch(e.getKeyChar()) {
+                    case 'o' : {
+                        System.out.println("You chosen circle");
+                        panel.changeShape(2);
+                        break;
+                    }
+                    case 'k' : {
+                        System.out.println("You chosen square");
+                        panel.changeShape(1);
+                        break;
+                    }
+                    default : {
+                        System.out.println("This key isn't assigned to do anything, try another one");
+                        break;
+                    }
+                }
+            }
+        });
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
@@ -89,9 +142,12 @@ public class MyFrame extends JFrame {
         this.getContentPane().removeAll();
         this.add(panel);
         this.add(label2);
+        this.add(label3);
+        this.add(label4);
         this.add(buttonR);
         this.add(buttonK);
         this.add(buttonO);
+        this.add(slider);
         this.validate();
         this.repaint();
     }
@@ -103,9 +159,5 @@ public class MyFrame extends JFrame {
 
     private void resetButtonN() {
         buttonN.setBounds(500,400,100,50);
-    }
-
-    private void resetFrame() {
-        panel.drawingCanvas.removeShape();
     }
 }
